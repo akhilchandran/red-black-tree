@@ -27,10 +27,75 @@ int insertnode(struct node **treeheadRef,int data)
 		newnode->right = NULL;
 		*treeheadRef = newnode;
 	}
-
+	if((*treeheadRef)->data < data){
+		insertnode(&(*treeheadRef)->right, data);
+		struct node *temp;
+		if(is_red((*treeheadRef)->right)){
+			if(is_red((*treeheadRef)->right->right)){
+				if(is_red((*treeheadRef)->left)){
+					(*treeheadRef)->color = RED;
+					(*treeheadRef)->left->color = BLACK;
+					(*treeheadRef)->right->color = BLACK;
+				}else{
+					rotatetoleft(treeheadRef);
+				}
+			}else if(is_red((*treeheadRef)->right->left){
+				if(is_red((*treeheadRef)->left)){
+					(*treeheadRef)->color = RED;
+					(*treeheadRef)->right->color = BLACK;
+					(*treeheadRef)->left->color = BLACK;
+				}else{
+					rotatetoright(&(*treeheadRef)->right);
+					rotatetoleft(treeheadRef);
+				}
+			}
+		}
+	}
+	else{
+		insertnode(&(*treeheadRef)->left, data);
+		if(is_red((*treeheadRef)->left)){
+			if(is_red((*treeheadRef)->left->left)){
+				if(is_red((*treeheadRef)->right)){
+					(*treeheadRef)->color = RED;
+					(*treeheadRef)->right->color = BLACK;
+					(*treeheadRef)->left->color = BLACK;
+				}else{
+					rotatetoright(treeheadRef);
+				}
+			}else if(is_red((*treeheadRef)->left->right){
+				if(is_red((*treeheadRef)->right)){
+					(*treeheadRef)->color = RED;
+					(*treeheadRef)->right->color = BLACK;
+					(*treeheadRef)->left->color = BLACK;
+				}else{
+					rotatetoleft(&(*treeheadRef)->left);
+					rotatetoright(treeheadRef);
+				}
+			}
+		}
+	}
 }
-	
-	
+void rotatetoleft(struct node **subtreeRef)
+{
+	struct node *temp;
+	temp = *subtreeRef;
+	*subtreeRef = (*subtreeRef)->right;
+	*subtreeRef->color = BLACK;
+	temp->right = (*subtreeRef)->left;
+	temp->color = RED;
+	(*subtreeRef)->left = temp;
+}
+
+void rotatetoright(struct node **subtreeRef)
+{
+	struct node *temp;
+	temp = *subtreeRef;
+	*subtreeRef = (*subtreeRef)->left;
+	*subtreeRef->color = BLACK;
+	temp->left = (*subtreeRef)->right;
+	temp->color = RED;
+	(*subtreeRef)->right = temp;
+}
 
 main()
 {
